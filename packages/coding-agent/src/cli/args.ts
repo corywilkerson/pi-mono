@@ -302,6 +302,9 @@ ${chalk.bold("Environment Variables:")}
   GEMINI_API_KEY                   - Google Gemini API key
   GROQ_API_KEY                     - Groq API key
   CEREBRAS_API_KEY                 - Cerebras API key
+  CLOUDFLARE_ACCOUNT_ID            - Cloudflare account ID for AI Gateway
+  CLOUDFLARE_GATEWAY_ID            - Cloudflare AI Gateway ID (default: "default")
+  CLOUDFLARE_API_TOKEN             - Cloudflare API token for AI Gateway
   XAI_API_KEY                      - xAI Grok API key
   FIREWORKS_API_KEY                - Fireworks API key
   OPENROUTER_API_KEY               - OpenRouter API key

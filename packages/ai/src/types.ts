@@ -4,6 +4,7 @@ export type { AssistantMessageEventStream } from "./utils/event-stream.js";
 
 export type KnownApi =
 	| "openai-completions"
+	| "cloudflare-ai-gateway"
 	| "mistral-conversations"
 	| "openai-responses"
 	| "azure-openai-responses"
@@ -30,6 +31,7 @@ export type KnownProvider =
 	| "xai"
 	| "groq"
 	| "cerebras"
+	| "cloudflare-ai-gateway"
 	| "openrouter"
 	| "vercel-ai-gateway"
 	| "zai"

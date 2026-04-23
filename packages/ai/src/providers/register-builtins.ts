@@ -13,6 +13,7 @@ import { AssistantMessageEventStream } from "../utils/event-stream.js";
 import type { BedrockOptions } from "./amazon-bedrock.js";
 import type { AnthropicOptions } from "./anthropic.js";
 import type { AzureOpenAIResponsesOptions } from "./azure-openai-responses.js";
+import type { CloudflareAIGatewayOptions } from "./cloudflare-ai-gateway.js";
 import type { GoogleOptions } from "./google.js";
 import type { GoogleGeminiCliOptions } from "./google-gemini-cli.js";
 import type { GoogleVertexOptions } from "./google-vertex.js";
@@ -79,6 +80,11 @@ interface OpenAIResponsesProviderModule {
 	streamSimpleOpenAIResponses: StreamFunction<"openai-responses", SimpleStreamOptions>;
 }
 
+interface CloudflareAIGatewayProviderModule {
+	streamCloudflareAIGateway: StreamFunction<"cloudflare-ai-gateway", CloudflareAIGatewayOptions>;
+	streamSimpleCloudflareAIGateway: StreamFunction<"cloudflare-ai-gateway", SimpleStreamOptions>;
+}
+
 interface BedrockProviderModule {
 	streamBedrock: (
 		model: Model<"bedrock-converse-stream">,
@@ -120,6 +126,9 @@ let openAICompletionsProviderModulePromise:
 	| undefined;
 let openAIResponsesProviderModulePromise:
 	| Promise<LazyProviderModule<"openai-responses", OpenAIResponsesOptions, SimpleStreamOptions>>
+	| undefined;
+let cloudflareAIGatewayProviderModulePromise:
+	| Promise<LazyProviderModule<"cloudflare-ai-gateway", CloudflareAIGatewayOptions, SimpleStreamOptions>>
 	| undefined;
 let bedrockProviderModuleOverride:
 	| LazyProviderModule<"bedrock-converse-stream", BedrockOptions, SimpleStreamOptions>
@@ -326,6 +335,19 @@ function loadOpenAIResponsesProviderModule(): Promise<
 	return openAIResponsesProviderModulePromise;
 }
 
+function loadCloudflareAIGatewayProviderModule(): Promise<
+	LazyProviderModule<"cloudflare-ai-gateway", CloudflareAIGatewayOptions, SimpleStreamOptions>
+> {
+	cloudflareAIGatewayProviderModulePromise ||= import("./cloudflare-ai-gateway.js").then((module) => {
+		const provider = module as CloudflareAIGatewayProviderModule;
+		return {
+			stream: provider.streamCloudflareAIGateway,
+			streamSimple: provider.streamSimpleCloudflareAIGateway,
+		};
+	});
+	return cloudflareAIGatewayProviderModulePromise;
+}
+
 function loadBedrockProviderModule(): Promise<
 	LazyProviderModule<"bedrock-converse-stream", BedrockOptions, SimpleStreamOptions>
 > {
@@ -360,6 +382,8 @@ export const streamOpenAICompletions = createLazyStream(loadOpenAICompletionsPro
 export const streamSimpleOpenAICompletions = createLazySimpleStream(loadOpenAICompletionsProviderModule);
 export const streamOpenAIResponses = createLazyStream(loadOpenAIResponsesProviderModule);
 export const streamSimpleOpenAIResponses = createLazySimpleStream(loadOpenAIResponsesProviderModule);
+export const streamCloudflareAIGateway = createLazyStream(loadCloudflareAIGatewayProviderModule);
+export const streamSimpleCloudflareAIGateway = createLazySimpleStream(loadCloudflareAIGatewayProviderModule);
 const streamBedrockLazy = createLazyStream(loadBedrockProviderModule);
 const streamSimpleBedrockLazy = createLazySimpleStream(loadBedrockProviderModule);
 
@@ -374,6 +398,12 @@ export function registerBuiltInApiProviders(): void {
 		api: "openai-completions",
 		stream: streamOpenAICompletions,
 		streamSimple: streamSimpleOpenAICompletions,
+	});
+
+	registerApiProvider({
+		api: "cloudflare-ai-gateway",
+		stream: streamCloudflareAIGateway,
+		streamSimple: streamSimpleCloudflareAIGateway,
 	});
 
 	registerApiProvider({

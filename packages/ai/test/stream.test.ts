@@ -1402,4 +1402,27 @@ describe("Generate E2E Tests", () => {
 			await multiTurn(llm, { apiKey: "test", reasoningEffort: "medium" });
 		});
 	});
+
+	describe.skipIf(!process.env.CLOUDFLARE_API_TOKEN || !process.env.CLOUDFLARE_ACCOUNT_ID)(
+		"Cloudflare AI Gateway Provider (openai/gpt-4o)",
+		() => {
+			const llm = getModel("cloudflare-ai-gateway", "openai/gpt-4o");
+
+			it("should complete basic text generation", { retry: 3 }, async () => {
+				await basicTextGeneration(llm);
+			});
+
+			it("should handle tool calling", { retry: 3 }, async () => {
+				await handleToolCall(llm);
+			});
+
+			it("should handle streaming", { retry: 3 }, async () => {
+				await handleStreaming(llm);
+			});
+
+			it("should handle image input", { retry: 3 }, async () => {
+				await handleImage(llm);
+			});
+		},
+	);
 });

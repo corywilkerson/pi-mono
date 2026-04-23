@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added Cloudflare AI Gateway provider support via the unified OpenAI-compatible `/compat/chat/completions` endpoint, including built-in models for OpenAI, Anthropic, Google, Groq, and Workers AI. Requires `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_GATEWAY_ID` (optional, defaults to "default"), and `CLOUDFLARE_API_TOKEN`.
+
 ### Fixed
 
 - Fixed `openai-completions` streamed tool-call assembly to coalesce deltas by stable tool index when OpenAI-compatible gateways mutate tool call IDs mid-stream, preventing malformed Kimi K2.6/OpenCode tool streams from splitting one call into multiple bogus tool calls ([#3576](https://github.com/badlogic/pi-mono/issues/3576))

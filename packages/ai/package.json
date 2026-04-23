@@ -18,6 +18,10 @@
 			"types": "./dist/providers/azure-openai-responses.d.ts",
 			"import": "./dist/providers/azure-openai-responses.js"
 		},
+		"./cloudflare-ai-gateway": {
+			"types": "./dist/providers/cloudflare-ai-gateway.d.ts",
+			"import": "./dist/providers/cloudflare-ai-gateway.js"
+		},
 		"./google": {
 			"types": "./dist/providers/google.d.ts",
 			"import": "./dist/providers/google.js"

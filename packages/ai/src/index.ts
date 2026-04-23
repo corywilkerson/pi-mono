@@ -7,6 +7,7 @@ export * from "./models.js";
 export type { BedrockOptions, BedrockThinkingDisplay } from "./providers/amazon-bedrock.js";
 export type { AnthropicEffort, AnthropicOptions, AnthropicThinkingDisplay } from "./providers/anthropic.js";
 export type { AzureOpenAIResponsesOptions } from "./providers/azure-openai-responses.js";
+export type { CloudflareAIGatewayOptions } from "./providers/cloudflare-ai-gateway.js";
 export * from "./providers/faux.js";
 export type { GoogleOptions } from "./providers/google.js";
 export type { GoogleGeminiCliOptions, GoogleThinkingLevel } from "./providers/google-gemini-cli.js";

@@ -1554,6 +1554,73 @@ async function generateModels() {
 		}));
 	allModels.push(...azureOpenAiModels);
 
+	// Cloudflare AI Gateway models (unified OpenAI-compatible endpoint)
+	// Base URL is constructed at runtime from CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_GATEWAY_ID
+	// We use a placeholder here; the actual URL is built in the provider
+	const cloudflareAIGatewayModels: Model<"cloudflare-ai-gateway">[] = [
+		{
+			id: "openai/gpt-4o",
+			name: "GPT-4o (Cloudflare AI Gateway)",
+			api: "cloudflare-ai-gateway",
+			provider: "cloudflare-ai-gateway",
+			baseUrl: "https://gateway.ai.cloudflare.com/v1",
+			reasoning: false,
+			input: ["text", "image"],
+			cost: { input: 2.5, output: 10, cacheRead: 1.25, cacheWrite: 0 },
+			contextWindow: 128000,
+			maxTokens: 16384,
+		},
+		{
+			id: "anthropic/claude-sonnet-4-5",
+			name: "Claude Sonnet 4.5 (Cloudflare AI Gateway)",
+			api: "cloudflare-ai-gateway",
+			provider: "cloudflare-ai-gateway",
+			baseUrl: "https://gateway.ai.cloudflare.com/v1",
+			reasoning: true,
+			input: ["text", "image"],
+			cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 3.75 },
+			contextWindow: 200000,
+			maxTokens: 64000,
+		},
+		{
+			id: "google/gemini-2.5-pro",
+			name: "Gemini 2.5 Pro (Cloudflare AI Gateway)",
+			api: "cloudflare-ai-gateway",
+			provider: "cloudflare-ai-gateway",
+			baseUrl: "https://gateway.ai.cloudflare.com/v1",
+			reasoning: true,
+			input: ["text", "image"],
+			cost: { input: 1.25, output: 10, cacheRead: 0.125, cacheWrite: 0 },
+			contextWindow: 1048576,
+			maxTokens: 65536,
+		},
+		{
+			id: "grok/grok-4",
+			name: "Grok 4 (Cloudflare AI Gateway)",
+			api: "cloudflare-ai-gateway",
+			provider: "cloudflare-ai-gateway",
+			baseUrl: "https://gateway.ai.cloudflare.com/v1",
+			reasoning: true,
+			input: ["text", "image"],
+			cost: { input: 3, output: 15, cacheRead: 0, cacheWrite: 0 },
+			contextWindow: 131072,
+			maxTokens: 8192,
+		},
+		{
+			id: "workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+			name: "Llama 3.3 70B Instruct (Cloudflare Workers AI)",
+			api: "cloudflare-ai-gateway",
+			provider: "cloudflare-ai-gateway",
+			baseUrl: "https://gateway.ai.cloudflare.com/v1",
+			reasoning: false,
+			input: ["text"],
+			cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+			contextWindow: 32768,
+			maxTokens: 8192,
+		},
+	];
+	allModels.push(...cloudflareAIGatewayModels);
+
 	// Group by provider and deduplicate by model ID
 	const providers: Record<string, Record<string, Model<any>>> = {};
 	for (const model of allModels) {
